@@ -1,5 +1,6 @@
 // If running from build, import module-alias to fix absolute path issue
 if (__dirname.includes('dist')) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   require('module-alias/register');
 }
 

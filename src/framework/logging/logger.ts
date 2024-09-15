@@ -1,4 +1,5 @@
 import { Logging as GCPCloudLogging } from '@google-cloud/logging';
+import { trace } from '@opentelemetry/api';
 import { ILogDetails } from 'src/framework/framework.types';
 import { asyncLocalStorage } from 'src/framework/logging/async-local-storage';
 import { isLocalEnv } from 'src/framework/utils';
@@ -8,9 +9,11 @@ let gcpLogClass: GCPCloudLogging | undefined;
 async function logToCloud(type: 'log' | 'warn' | 'error' | 'info', logDetails: ILogDetails): Promise<void> {
   const store = asyncLocalStorage.getStore();
 
+  const traceId = trace.getActiveSpan()?.spanContext().traceId;
+  const spanId = trace.getActiveSpan()?.spanContext().spanId;
+
   if (!gcpLogClass) gcpLogClass = new GCPCloudLogging({ projectId: store?.get('projectId') });
 
-  // const gcpLogger = gcpLogClass.logSync(logDetails.appName);
   const gcpLogger = gcpLogClass.logSync(logDetails.appName);
 
   const metaData = {
@@ -19,8 +22,9 @@ async function logToCloud(type: 'log' | 'warn' | 'error' | 'info', logDetails: I
       requestMethod: store?.get('requestMethod'),
       requestUrl: store?.get('requestUrl'),
     },
+    spanId,
     stack_trace: logDetails?.stackTrace,
-    trace: `projects/${store?.get('projectId')}/traces/${store?.get('traceId')}`,
+    trace: `projects/${store?.get('projectId')}/traces/${traceId}`,
   };
 
   if (!logDetails.additionalInfo) logDetails.additionalInfo = {};

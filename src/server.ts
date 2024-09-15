@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 import fastify, { FastifyInstance } from 'fastify';
 import { addLocalStoreHook } from 'src/framework/logging/async-local-storage';
 import { userRoutes } from 'src/modules/user/users.routes';
