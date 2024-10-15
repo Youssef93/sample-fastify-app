@@ -1,10 +1,11 @@
 import 'knex';
 
 import type { Knex } from 'knex';
+import { getConfig } from 'src/framework/configurations/config.service';
 
 const config: Knex.Config = {
   client: 'pg',
-  connection: process.env.DATABASE_URL,
+  connection: getConfig().database.url,
   migrations: {
     directory: __dirname + '/migrations',
   },

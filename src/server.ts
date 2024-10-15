@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-import fastify, { FastifyInstance } from 'fastify';
+import { fastifyEnv } from '@fastify/env';
+import { FastifyInstance } from 'fastify';
+import fastify from 'fastify';
+import { EnvVariablesSchema } from 'src/framework/configurations/env-variables.schema';
 import { addLocalStoreHook } from 'src/framework/logging/async-local-storage';
+import { isLocalEnv } from 'src/framework/utils';
 import { userRoutes } from 'src/modules/user/users.routes';
-
-export const app = fastify();
 
 const allRoutes = [...userRoutes];
 
+export const app = fastify();
 addLocalStoreHook(app);
 
 export const startServer = async (): Promise<FastifyInstance> => {
@@ -44,6 +47,15 @@ export const startServer = async (): Promise<FastifyInstance> => {
     },
     staticCSP: true,
     transformSpecificationClone: true,
+  });
+
+  app.register(fastifyEnv, {
+    schema: EnvVariablesSchema,
+    dotenv: isLocalEnv()
+      ? {
+          path: `.env.${process.env.NODE_ENV || 'local'}`,
+        }
+      : undefined,
   });
 
   allRoutes.forEach(route => {
