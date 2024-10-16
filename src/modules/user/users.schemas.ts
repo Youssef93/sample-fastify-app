@@ -1,4 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
+import { setDefaultsOnStaticSchema } from 'src/framework/utils';
 
 export const UserSchema = Type.Object({
   name: Type.String({
@@ -8,4 +9,7 @@ export const UserSchema = Type.Object({
   age: Type.Optional(Type.Number({ default: 10 })),
 });
 
-export type UserType = Static<typeof UserSchema>;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const type = setDefaultsOnStaticSchema(UserSchema, ['age']);
+
+export type UserType = Static<typeof type>;

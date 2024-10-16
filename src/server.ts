@@ -2,7 +2,7 @@
 import { fastifyEnv } from '@fastify/env';
 import { FastifyInstance } from 'fastify';
 import fastify from 'fastify';
-import { EnvVariablesSchema } from 'src/framework/configurations/env-variables.schema';
+import { EnvVariablesSchema } from 'src/framework/configurations/config.service';
 import { addLocalStoreHook } from 'src/framework/logging/async-local-storage';
 import { isLocalEnv } from 'src/framework/utils';
 import { userRoutes } from 'src/modules/user/users.routes';

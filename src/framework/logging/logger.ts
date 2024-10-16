@@ -1,5 +1,6 @@
 import { Logging as GCPCloudLogging } from '@google-cloud/logging';
 import { trace } from '@opentelemetry/api';
+import { getConfig } from 'src/framework/configurations/config.service';
 import { ILogDetails } from 'src/framework/framework.types';
 import { asyncLocalStorage } from 'src/framework/logging/async-local-storage';
 import { isLocalEnv } from 'src/framework/utils';
@@ -12,7 +13,9 @@ async function logToCloud(type: 'log' | 'warn' | 'error' | 'info', logDetails: I
   const traceId = trace.getActiveSpan()?.spanContext().traceId;
   const spanId = trace.getActiveSpan()?.spanContext().spanId;
 
-  if (!gcpLogClass) gcpLogClass = new GCPCloudLogging({ projectId: store?.get('projectId') });
+  const projectId = getConfig().gcp.projectId;
+
+  if (!gcpLogClass) gcpLogClass = new GCPCloudLogging({ projectId });
 
   const gcpLogger = gcpLogClass.logSync(logDetails.appName);
 
@@ -24,7 +27,7 @@ async function logToCloud(type: 'log' | 'warn' | 'error' | 'info', logDetails: I
     },
     spanId,
     stack_trace: logDetails?.stackTrace,
-    trace: `projects/${store?.get('projectId')}/traces/${traceId}`,
+    trace: `projects/${projectId}/traces/${traceId}`,
   };
 
   if (!logDetails.additionalInfo) logDetails.additionalInfo = {};
@@ -44,7 +47,6 @@ function internalLog(type: 'log' | 'warn' | 'error' | 'info', logDetails: ILogDe
   } else {
     logToCloud(type, logDetails);
   }
-  // console[type](logDetails.message)
 }
 
 export function log(logDetails: ILogDetails): void {
