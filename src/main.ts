@@ -6,11 +6,17 @@ if (__dirname.includes('dist')) {
 
 import { startServer } from 'src/server';
 
+import { log } from './framework/logging/logger';
+
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 startServer().then(server => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   server.listen({ port }, (err, address) => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+    log({
+      message: `⚡️[server]: Server is running at http://localhost:${port}`,
+      appName: 'fastify-app',
+      serviceName: 'Main',
+    });
   });
 });

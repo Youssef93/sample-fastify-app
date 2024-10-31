@@ -51,6 +51,7 @@ const exporter = new TraceExporter({
 });
 
 // Configure the span processor to batch and send spans to the exporter
+//@ts-expect-error: pass span processor
 provider.addSpanProcessor(new BatchSpanProcessor(exporter));
 provider.register();
 

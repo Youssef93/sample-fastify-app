@@ -3,7 +3,7 @@ import { trace } from '@opentelemetry/api';
 import { getConfig } from 'src/framework/configurations/config.service';
 import { ILogDetails } from 'src/framework/framework.types';
 import { asyncLocalStorage } from 'src/framework/logging/async-local-storage';
-import { isLocalEnv } from 'src/framework/utils';
+import { getSafeValue, isLocalEnv } from 'src/framework/utils';
 
 let gcpLogClass: GCPCloudLogging | undefined;
 
@@ -43,7 +43,7 @@ async function logToCloud(type: 'log' | 'warn' | 'error' | 'info', logDetails: I
 
 function internalLog(type: 'log' | 'warn' | 'error' | 'info', logDetails: ILogDetails): void {
   if (isLocalEnv()) {
-    console[type](logDetails.message);
+    getSafeValue(console, type)(logDetails.message);
   } else {
     logToCloud(type, logDetails);
   }
