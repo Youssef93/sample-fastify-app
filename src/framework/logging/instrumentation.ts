@@ -55,14 +55,13 @@ const exporter = new TraceExporter({
 provider.addSpanProcessor(new BatchSpanProcessor(exporter));
 provider.register();
 
-const sdk = new NodeSDK({
+export const instrumentationSDK = new NodeSDK({
   // Optional - if omitted, the tracing SDK will be initialized from environment variables
   traceExporter: exporter,
   // Optional - you can use the metapackage or load each instrumentation individually
   instrumentations: [getNodeAutoInstrumentations()],
 });
-sdk.start();
 
 // You can also use the shutdown method to gracefully shut down the SDK before process shutdown
 // or on some operating system signal.
-process.on('SIGTERM', () => onShutdown(sdk));
+process.on('SIGTERM', () => onShutdown(instrumentationSDK));

@@ -6,7 +6,6 @@ export const getUser = async (request: FastifyRequest, reply: FastifyReply): Pro
   const body = request.body as UserType;
 
   Logger.log({
-    appName: 'test',
     message: JSON.stringify(body),
     serviceName: 'Controller',
   });

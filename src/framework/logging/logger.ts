@@ -7,6 +7,8 @@ import { getSafeValue, isLocalEnv } from 'src/framework/utils';
 
 let gcpLogClass: GCPCloudLogging | undefined;
 
+const APP_NAME = 'test';
+
 async function logToCloud(type: 'log' | 'warn' | 'error' | 'info', logDetails: ILogDetails): Promise<void> {
   const store = asyncLocalStorage.getStore();
 
@@ -17,7 +19,7 @@ async function logToCloud(type: 'log' | 'warn' | 'error' | 'info', logDetails: I
 
   if (!gcpLogClass) gcpLogClass = new GCPCloudLogging({ projectId });
 
-  const gcpLogger = gcpLogClass.logSync(logDetails.appName);
+  const gcpLogger = gcpLogClass.logSync(APP_NAME);
 
   const metaData = {
     severity: type.toUpperCase(),

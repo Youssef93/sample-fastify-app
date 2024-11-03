@@ -26,7 +26,7 @@ export default tseslint.config(
       'no-relative-import-paths': pluginNoRelativeImportPaths,
     },
     rules: {
-      'no-relative-import-paths/no-relative-import-paths': ['warn', { allowSameFolder: true }],
+      'no-relative-import-paths/no-relative-import-paths': ['warn'],
     },
   },
   pluginPrettierRecommended,

@@ -4,9 +4,11 @@ if (__dirname.includes('dist')) {
   require('module-alias/register');
 }
 
-import { startServer } from 'src/server';
+import { instrumentationSDK } from 'src/framework/logging/instrumentation';
+instrumentationSDK.start();
 
-import { log } from './framework/logging/logger';
+import { log } from 'src/framework/logging/logger';
+import { startServer } from 'src/server';
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
@@ -15,7 +17,6 @@ startServer().then(server => {
   server.listen({ port }, (err, address) => {
     log({
       message: `⚡️[server]: Server is running at http://localhost:${port}`,
-      appName: 'fastify-app',
       serviceName: 'Main',
     });
   });

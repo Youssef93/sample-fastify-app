@@ -15,7 +15,6 @@ export const handleServerError = async (
     });
   } else {
     Logger.error({
-      appName: 'backend',
       message: `Error ${err.message}`,
       serviceName: 'Error Handler',
     });

@@ -1,6 +1,5 @@
 import { TObject, TProperties, Type } from '@sinclair/typebox';
-
-import { AppError } from './errors/error-factory';
+import { AppError } from 'src/framework/errors/error-factory';
 
 export const isLocalEnv = (): boolean =>
   !process.env.NODE_ENV || ['local', 'test'].includes(process.env['NODE_ENV'] as string);

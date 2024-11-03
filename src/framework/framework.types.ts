@@ -53,7 +53,6 @@ export type OBJECT = {
 
 export interface ILogDetails {
   message: string;
-  appName: string;
   serviceName: string;
   stackTrace?: string;
   additionalInfo?: OBJECT;

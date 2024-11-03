@@ -43,7 +43,7 @@ export const startServer = async (): Promise<FastifyInstance> => {
     routePrefix: '/swagger',
     uiConfig: {
       docExpansion: 'full',
-      deepLinking: false,
+      deepLinking: true,
     },
     staticCSP: true,
     transformSpecificationClone: true,
