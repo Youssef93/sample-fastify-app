@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 import { fastifyEnv } from '@fastify/env';
+import helmet from '@fastify/helmet';
 import { FastifyInstance } from 'fastify';
 import fastify from 'fastify';
 import { EnvVariablesSchema } from 'src/framework/configurations/config.service';
@@ -13,6 +14,8 @@ export const app = fastify();
 addLocalStoreHook(app);
 
 export const startServer = async (): Promise<FastifyInstance> => {
+  app.register(helmet, { global: true });
+
   await app.register(require('@fastify/swagger'), {
     openapi: {
       openapi: '3.0.0',

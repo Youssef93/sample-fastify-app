@@ -7,7 +7,7 @@ export const handleServerError = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ): Promise<void> => {
-  if (err instanceof AppError) {
+  if (err instanceof AppError && err.statusCode !== 500) {
     reply.status(err.statusCode).send({
       statusCode: err.statusCode,
       error: err.message,

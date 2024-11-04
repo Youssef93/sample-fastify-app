@@ -1,5 +1,5 @@
 import { TObject, TProperties, Type } from '@sinclair/typebox';
-import { AppError } from 'src/framework/errors/error-factory';
+import { InternalServerError } from 'src/framework/errors/error-factory';
 
 export const isLocalEnv = (): boolean =>
   !process.env.NODE_ENV || ['local', 'test'].includes(process.env['NODE_ENV'] as string);
@@ -11,7 +11,7 @@ export function getSafeValue<T, R = any>(obj: T, key: keyof T): R {
   if (!obj) return undefined as R;
 
   if (forbiddenKeys.includes(key.toString()))
-    throw new AppError(500, `Cannot get key ${key.toString()} as it is a forbidden value`);
+    throw new InternalServerError(`Cannot get key ${key.toString()} as it is a forbidden value`);
 
   // eslint-disable-next-line security/detect-object-injection
   return obj[key] as R;
