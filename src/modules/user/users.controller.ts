@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import * as Logger from 'src/framework/logging/logger';
-import { UserType } from 'src/modules/user/users.schemas';
+import { UserType } from 'src/entities/users.entities';
 
-export const getUser = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
+export const getUser = async (request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> => {
   const body = request.body as UserType;
 
   Logger.log({
@@ -11,4 +11,5 @@ export const getUser = async (request: FastifyRequest, reply: FastifyReply): Pro
   });
 
   reply.code(201).send(body);
+  return reply;
 };

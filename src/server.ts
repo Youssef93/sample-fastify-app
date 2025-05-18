@@ -1,6 +1,10 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
+import compression from '@fastify/compress';
+import Cors from '@fastify/cors';
 import { fastifyEnv } from '@fastify/env';
 import helmet from '@fastify/helmet';
+import Swagger from '@fastify/swagger';
+import SwaggerUi from '@fastify/swagger-ui';
+import * as dotenv from 'dotenv';
 import { FastifyInstance } from 'fastify';
 import fastify from 'fastify';
 import { EnvVariablesSchema } from 'src/framework/configurations/config.service';
@@ -10,13 +14,46 @@ import { userRoutes } from 'src/modules/user/users.routes';
 
 const allRoutes = [...userRoutes];
 
-export const app = fastify();
+const dotEnvConfig = { path: `.env.${process.env.NODE_ENV || 'local'}` };
+if (isLocalEnv()) dotenv.config(dotEnvConfig);
+
+export const app = fastify({
+  ajv: {
+    customOptions: {
+      strict: true,
+      strictRequired: true,
+      removeAdditional: 'all',
+    },
+  },
+});
 addLocalStoreHook(app);
 
 export const startServer = async (): Promise<FastifyInstance> => {
-  app.register(helmet, { global: true });
+  app.register(helmet, {
+    global: true,
+  });
 
-  await app.register(require('@fastify/swagger'), {
+  // Disable compression in test environment
+  if (process.env.NODE_ENV !== 'test') {
+    /* istanbul ignore next */
+    app.register(compression, {
+      global: true,
+      encodings: ['gzip', 'deflate'],
+    });
+  }
+
+  app.register(fastifyEnv, {
+    schema: EnvVariablesSchema,
+    dotenv: isLocalEnv() ? dotEnvConfig : undefined,
+  });
+
+  app.register(Cors, {
+    origin: process.env.CORS_DOMAINS?.split(','),
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['*'],
+  });
+
+  await app.register(Swagger, {
     openapi: {
       openapi: '3.0.0',
       info: {
@@ -42,7 +79,7 @@ export const startServer = async (): Promise<FastifyInstance> => {
     },
   });
 
-  await app.register(require('@fastify/swagger-ui'), {
+  await app.register(SwaggerUi, {
     routePrefix: '/swagger',
     uiConfig: {
       docExpansion: 'full',
@@ -50,15 +87,6 @@ export const startServer = async (): Promise<FastifyInstance> => {
     },
     staticCSP: true,
     transformSpecificationClone: true,
-  });
-
-  app.register(fastifyEnv, {
-    schema: EnvVariablesSchema,
-    dotenv: isLocalEnv()
-      ? {
-          path: `.env.${process.env.NODE_ENV || 'local'}`,
-        }
-      : undefined,
   });
 
   allRoutes.forEach(route => {

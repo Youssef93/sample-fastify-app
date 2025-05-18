@@ -16,6 +16,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@fastify/compress": "^8.0.1",
+    "@fastify/cors": "^11.0.1",
     "@fastify/env": "^5.0.1",
     "@fastify/helmet": "^12.0.1",
     "@fastify/swagger": "^9.2.0",

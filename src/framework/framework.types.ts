@@ -45,7 +45,7 @@ export interface IAppRoute {
   middlewares?: FastifyMiddleware[];
 }
 
-type JSON = { [key: string]: JSON } | string | number | boolean | bigint | null | undefined | Array<JSON>;
+type JSON = { [key: string]: JSON } | string | number | boolean | bigint | null | undefined | Array<JSON> | unknown;
 
 export type OBJECT = {
   [key: string]: JSON;

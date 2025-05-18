@@ -1,7 +1,7 @@
 import { IAppRoute, IRouteMethod } from 'src/framework/framework.types';
 import { ApiKeyMiddleware } from 'src/middlewares/apikey.middleware';
 import { getUser } from 'src/modules/user/users.controller';
-import { UserSchema } from 'src/modules/user/users.schemas';
+import { UserSchema } from 'src/entities/users.entities';
 
 export const userRoutes: IAppRoute[] = [
   {
