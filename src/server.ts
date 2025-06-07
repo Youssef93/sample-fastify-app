@@ -1,21 +1,23 @@
+import * as dotenv from 'dotenv';
+import { isLocalEnv } from 'src/framework/utils';
+
+const dotEnvConfig = { path: `.env.${process.env.NODE_ENV || 'local'}` };
+if (isLocalEnv()) dotenv.config(dotEnvConfig);
+
 import compression from '@fastify/compress';
 import Cors from '@fastify/cors';
 import { fastifyEnv } from '@fastify/env';
 import helmet from '@fastify/helmet';
 import Swagger from '@fastify/swagger';
 import SwaggerUi from '@fastify/swagger-ui';
-import * as dotenv from 'dotenv';
 import { FastifyInstance } from 'fastify';
 import fastify from 'fastify';
+import { knexClient } from 'src/database/knexfile';
 import { EnvVariablesSchema } from 'src/framework/configurations/config.service';
 import { addLocalStoreHook } from 'src/framework/logging/async-local-storage';
-import { isLocalEnv } from 'src/framework/utils';
 import { userRoutes } from 'src/modules/user/users.routes';
 
 const allRoutes = [...userRoutes];
-
-const dotEnvConfig = { path: `.env.${process.env.NODE_ENV || 'local'}` };
-if (isLocalEnv()) dotenv.config(dotEnvConfig);
 
 export const app = fastify({
   ajv: {
@@ -99,6 +101,8 @@ export const startServer = async (): Promise<FastifyInstance> => {
       route.controller,
     );
   });
+
+  await knexClient.migrate.latest();
 
   await app.ready();
 

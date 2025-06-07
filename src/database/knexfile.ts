@@ -1,17 +1,23 @@
 import 'knex';
 
-import type { Knex } from 'knex';
-import { getConfig } from 'src/framework/configurations/config.service';
+import knex, { type Knex } from 'knex';
+import { isLocalEnv } from 'src/framework/utils';
+
+const extensions = isLocalEnv() && process.env.IS_DOCKER !== 'true' ? ['.ts'] : ['.js'];
 
 const config: Knex.Config = {
   client: 'pg',
-  connection: getConfig().database.url,
+  connection: process.env.DATABASE_URL,
   migrations: {
     directory: __dirname + '/migrations',
+    loadExtensions: extensions,
   },
   seeds: {
     directory: __dirname + '/seeds',
+    loadExtensions: extensions,
   },
 };
 
 export default config;
+
+export const knexClient = knex.default(config);

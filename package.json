@@ -9,7 +9,8 @@
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/main.ts",
     "serve": "node dist/main.js",
     "lint:fix": "eslint --fix",
-    "lint": "eslint"
+    "lint": "eslint",
+    "migrate:create": "knex migrate:make --knexfile ./src/database/knexfile.ts"
   },
   "keywords": [],
   "author": "",

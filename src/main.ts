@@ -14,7 +14,7 @@ const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 startServer().then(server => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  server.listen({ port }, (err, address) => {
+  server.listen({ port, host: '0.0.0.0' }, (err, address) => {
     log({
       message: `⚡️[server]: Server is running at http://localhost:${port}`,
       serviceName: 'Main',
