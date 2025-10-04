@@ -19,7 +19,8 @@ async function logToCloud(type: 'log' | 'warn' | 'error' | 'info', logDetails: I
 
   if (!gcpLogClass) gcpLogClass = new GCPCloudLogging({ projectId });
 
-  const gcpLogger = gcpLogClass.logSync(APP_NAME);
+  // TODO test log vs logSync on GCP cloud
+  const gcpLogger = gcpLogClass.log(APP_NAME);
 
   const metaData = {
     severity: type.toUpperCase(),
