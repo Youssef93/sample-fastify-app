@@ -1,4 +1,4 @@
-import { TObject, TProperties, Type } from '@sinclair/typebox';
+import { TObject, TProperties, TSchema, TUnsafe, Type } from '@sinclair/typebox';
 import { InternalServerError } from 'src/framework/errors/error-factory';
 
 export const isLocalEnv = (): boolean =>
@@ -49,3 +49,15 @@ export function setDefaultsOnStaticSchema<S extends TObject<TProperties>, K exte
   // Return the intersected schema
   return Type.Intersect([omittedSchema, requiredSchema]);
 }
+
+const EnumToStringArray = <T extends Record<string, string>>(e: T): string[] => Object.values(e);
+
+export const StringEnum = <T extends Record<string, string>>(
+  enumObj: T,
+  options?: Partial<Omit<TSchema, 'type' | 'enum'>>,
+): TUnsafe<T[keyof T]> =>
+  Type.Unsafe<T[keyof T]>({
+    type: 'string',
+    enum: EnumToStringArray(enumObj),
+    ...options,
+  });
