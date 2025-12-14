@@ -31,10 +31,7 @@ export interface FastifyMiddleware {
 }
 
 export enum SWAGGER_SECURITIES {
-  TOKEN = 'token',
   API_KEY = 'apiKey',
-  CAPTCHA = 'captcha',
-  SQUARE_SIGNATURE = 'squareSignature',
 }
 
 type SecurityEntry = {
