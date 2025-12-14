@@ -1,4 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
+import { UserTypeEnumSchema } from 'src/entities/enums';
 import { setDefaultsOnStaticSchema } from 'src/framework/utils';
 
 export const UserSchema = Type.Object({
@@ -7,6 +8,7 @@ export const UserSchema = Type.Object({
   }),
   mail: Type.Optional(Type.String({ format: 'email' })),
   age: Type.Optional(Type.Number({ default: 10 })),
+  type: Type.Ref(UserTypeEnumSchema),
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
